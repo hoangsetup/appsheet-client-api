@@ -18,6 +18,14 @@
   "keywords": [
     "appsheet"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoangsetup/appsheet-client-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hoangsetup/appsheet-client-api/issues"
+  },
+  "homepage": "https://github.com/hoangsetup/appsheet-client-api#readme",
   "author": "Hoang Dinh<hoang.dv@outlook.com>",
   "license": "MIT",
   "devDependencies": {
