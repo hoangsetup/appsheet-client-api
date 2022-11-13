@@ -157,4 +157,23 @@ describe('AppSheetApiClient', () => {
       expect(httpClient.request).not.toHaveBeenCalled();
     });
   });
+
+  describe('update()', () => {
+    it('should call request with Update action', async () => {
+      const actual = await client.update(tableName, rows);
+
+      expect(httpClient.request).toHaveBeenCalledWith(
+        expectedUrl,
+        key,
+        {
+          Properties: {
+            ...properties,
+          },
+          Action: 'Edit',
+          Rows: rows,
+        } as RequestBody,
+      );
+      expect(actual).toBe(response);
+    });
+  });
 });

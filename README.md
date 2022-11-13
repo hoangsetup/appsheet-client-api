@@ -70,6 +70,21 @@ const deletedRows = await client.delete<IAccount>('Accounts', accounts);
 //    ^? const deletedRows: IAccount[]
 ```
 
+### Update records in a table
+
+**update\<T>(tableName: string, rows: T[]) => Promise<T[]>**
+
+Example:
+
+```ts
+const accounts: IAccount[] = [
+  { email: 'foo@example.com', name: 'Foo' },
+];
+
+const updatedRows = await client.update<IAccount>('Accounts', accounts);
+//    ^? const updatedRows: IAccount[]
+```
+
 ### Read records from a table
 
 Read existing records in a table using the API.
@@ -89,8 +104,7 @@ const accounts = await client.readAllRows<IAccount>('Accounts');
 
 In this function, you can specify an expression to select and format the rows returned.
 
-Example: You want to filter data on `Pepple` table by following Selector
-- `Select(People[_ComputedKey], And([Age] >= 21, [State] = "CA"), true)`
+Example: You want to filter data on `Pepple` table by following Selector `Select(People[_ComputedKey], And([Age] >= 21, [State] = "CA"), true)`
 
 - Option 1: You can define selector as a string
 

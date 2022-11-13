@@ -84,6 +84,13 @@ export class AppSheetApiClient {
     });
   }
 
+  update<T extends DataType = DataType>(tableName: string, rows: T[]): Promise<T[]> {
+    return this.makeRequest<T>(tableName, {
+      Action: 'Edit',
+      Rows: rows,
+    });
+  }
+
   private makeRequest<T>(
     tableName: string,
     data: RequestBody,
