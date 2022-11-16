@@ -8,7 +8,7 @@
     "./build"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "eslint src/**/*.ts",
     "prebuild": "rm -rf ./build",
     "build": "tsc -p ./tsconfig.build.json",
