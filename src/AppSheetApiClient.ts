@@ -59,6 +59,13 @@ export class AppSheetApiClient {
     });
   }
 
+  readByKeys<T extends DataType = DataType>(tableName: string, keys: T[]): Promise<T[]> {
+    return this.makeRequest<T>(tableName, {
+      Action: 'Find',
+      Rows: keys,
+    });
+  }
+
   async readSelectedRows<T extends DataType = DataType>(
     tableName: string,
     selector: string | QueryExpression,
