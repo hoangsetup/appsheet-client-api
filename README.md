@@ -100,6 +100,17 @@ const accounts = await client.readAllRows<IAccount>('Accounts');
 //    ^? const accounts: IAccount[]
 ```
 
+#### **readByKeys\<T>(tableName: string, keys: T[]) => Promise<T[]>**
+
+This will return all rows having matching key values from the table.
+
+Example:
+
+```ts
+const accounts = await client.readByKeys<IAccount>('Accounts', [{ ID: '0001'}]);
+//    ^? const accounts: IAccount[]
+```
+
 #### **readSelectedRows\<T>(tableName: string, selector: string | QueryExpression) => Promise<T[]>**
 
 In this function, you can specify an expression to select and format the rows returned.
