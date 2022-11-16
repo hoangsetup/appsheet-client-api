@@ -88,6 +88,26 @@ describe('AppSheetApiClient', () => {
     });
   });
 
+  describe('readByKeys()', () => {
+    it('should call request with Find action', async () => {
+      const keys = [{ ID: '1' }, { ID: '2' }];
+      const actual = await client.readByKeys(tableName, keys);
+
+      expect(httpClient.request).toHaveBeenCalledWith(
+        expectedUrl,
+        key,
+        {
+          Properties: {
+            ...properties,
+          },
+          Action: 'Find',
+          Rows: keys,
+        } as RequestBody,
+      );
+      expect(actual).toBe(response);
+    });
+  });
+
   describe('readSelectedRows()', () => {
     beforeEach(() => {
       jest.spyOn(QE, 'isQueryExpression');
