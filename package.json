@@ -7,6 +7,10 @@
   "files": [
     "./build"
   ],
+  "engines": {
+    "node": ">=14",
+    "npm": ">=6"
+  },
   "scripts": {
     "test": "jest --coverage",
     "lint": "eslint src/**/*.ts",
