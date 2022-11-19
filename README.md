@@ -1,6 +1,8 @@
 # AppSheetApiClient
 
-A Node.js wrapper for [Google AppSheet API](https://support.google.com/appsheet/answer/10105768)
+A wrapper for [Google AppSheet API](https://support.google.com/appsheet/answer/10105768) 
+that can be used in Node.JS as well as in advanced JavaScript frameworks like React, Vue.js, and Angular.
+
 
 ## Enable API
 

@@ -1,88 +1,48 @@
-import * as https from 'https';
-import { ClientRequest, IncomingMessage } from 'http';
+import * as browser from './BrowserHttpClient';
+import * as https from './NodeHttpClient';
 import { request } from './HttpClient';
-import { EventEmitter } from 'events';
 
 describe('HttpClient', () => {
+  const url = 'api-url';
+  const applicationAccessKey = 'application-access-key';
+  const payload = { foo: 'baz' };
+  const responseData = { jazz: 'baz' };
+
+  beforeEach(() => {
+    jest.spyOn(browser, 'fetchPost').mockResolvedValue(responseData);
+    jest.spyOn(https, 'httpPost').mockResolvedValue(responseData);
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe('request()', () => {
-    const url = 'api-url';
-    const applicationAccessKey = 'application-access-key';
-    const payload = { foo: 'baz' };
-    let clientRequest: ClientRequest;
-    let incomingMessage: IncomingMessage;
+    it('should use fetchPost function when running on a browser', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (global as any).window = { document: {} };
 
-    beforeEach(() => {
-      clientRequest = new EventEmitter() as ClientRequest;
-      clientRequest.write = jest.fn();
-      clientRequest.end = jest.fn();
-      incomingMessage = new EventEmitter() as IncomingMessage;
-      incomingMessage.statusCode = 200;
+      const actual = await request(url, applicationAccessKey, payload);
 
-      jest.spyOn(https, 'request').mockImplementation((url, options, callback) => {
-        if (callback) {
-          callback(incomingMessage);
-        }
-        return clientRequest;
+      expect(browser.fetchPost).toHaveBeenCalledWith(url, applicationAccessKey, payload);
+      expect(https.httpPost).not.toHaveBeenCalled();
+      expect(actual).toBe(responseData);
+    });
+
+    [
+      undefined,
+      { document: undefined },
+    ].forEach((windowObject, index) => {
+      it(`should use httpPost function when NOT running on a browser. Case(${index})`, async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (global as any).window = windowObject;
+
+        const actual = await request(url, applicationAccessKey, payload);
+
+        expect(browser.fetchPost).not.toHaveBeenCalled();
+        expect(https.httpPost).toHaveBeenCalledWith(url, applicationAccessKey, payload);
+        expect(actual).toBe(responseData);
       });
-    });
-
-    it('should call https.request() and write data to the request', async () => {
-      const promise = request(url, applicationAccessKey, payload);
-      incomingMessage.emit('data', Buffer.from(JSON.stringify({})));
-      incomingMessage.emit('end');
-      await promise;
-
-      expect(https.request).toHaveBeenCalledWith(
-        url,
-        {
-          method: 'POST',
-          headers: {
-            ApplicationAccessKey: applicationAccessKey,
-            'Content-Type': 'application/json',
-          },
-        },
-        expect.any(Function),
-      );
-      expect(clientRequest.write).toHaveBeenCalledWith(JSON.stringify(payload));
-      expect(clientRequest.end).toHaveBeenCalled();
-    });
-
-    it('should resolve with response object', async () => {
-      const promise = request(url, applicationAccessKey, payload);
-      incomingMessage.emit('data', Buffer.from('[{"key":'));
-      incomingMessage.emit('data', Buffer.from('"value"}]'));
-      incomingMessage.emit('end');
-
-      await expect(promise).resolves.toEqual([{ key: 'value' }]);
-    });
-
-    it('should reject with error when status code is not 200', async () => {
-      const response = { Message: 'error message '};
-      incomingMessage.statusCode = 400;
-
-      const promise = request(url, applicationAccessKey, payload);
-      incomingMessage.emit('data', Buffer.from(JSON.stringify(response)));
-      incomingMessage.emit('end');
-
-      await expect(promise).rejects.toThrow(`${response.Message}. HttpStatus: 400`);
-    });
-
-    it('should handle response error event', async () => {
-      const error = new Error('response-error');
-
-      const promise = request(url, applicationAccessKey, payload);
-      incomingMessage.emit('error', error);
-
-      await expect(promise).rejects.toThrow(error);
-    });
-
-    it('should handle request error event', async () => {
-      const error = new Error('request-error');
-
-      const promise = request(url, applicationAccessKey, payload);
-      clientRequest.emit('error', error);
-
-      await expect(promise).rejects.toThrow(error);
     });
   });
 });
