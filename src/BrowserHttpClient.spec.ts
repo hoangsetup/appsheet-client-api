@@ -9,10 +9,12 @@ describe('BrowserHttpClient', () => {
   let fetchSpy:  jest.SpyInstance<Promise<Response>, [input: RequestInfo | URL, init?: RequestInit | undefined]>
 
   beforeEach(() => {
-    fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue({
+    fetchSpy = jest.fn().mockResolvedValue({
       status: 200,
       json: jest.fn().mockResolvedValue(responseData),
     } as unknown as Response);
+
+    global.fetch = fetchSpy as unknown as typeof global.fetch;
   });
 
   describe('fetchPost()', () => {
