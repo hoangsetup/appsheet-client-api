@@ -15,5 +15,10 @@ module.exports = {
   'plugins': [
     '@typescript-eslint',
   ],
+  ignorePatterns: [
+    "build",
+    "coverage",
+    "node_modules"
+  ],
   'rules': {},
 };

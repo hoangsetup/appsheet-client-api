@@ -3,7 +3,20 @@
   "version": "1.0.0-beta.0",
   "description": "AppSheet api integration library for Node.js",
   "main": "./build/index.js",
-  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "default": "./build/index.d.ts"
+      },
+      "browser": {
+        "default": "./build/browser/index.js"
+      },
+      "default": {
+        "default": "./build/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "./build"
   ],

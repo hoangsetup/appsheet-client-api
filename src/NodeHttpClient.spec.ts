@@ -3,7 +3,7 @@ import { ClientRequest, IncomingMessage } from 'http';
 import { httpPost } from './NodeHttpClient';
 import { EventEmitter } from 'events';
 
-describe('HttpClient', () => {
+describe('NodeHttpClient', () => {
   describe('fetchPost()', () => {
     const url = 'api-url';
     const applicationAccessKey = 'application-access-key';

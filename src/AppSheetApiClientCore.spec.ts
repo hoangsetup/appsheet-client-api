@@ -1,10 +1,10 @@
-import { AppSheetApiClient, Properties, RequestBody } from './AppSheetApiClient';
-import * as httpClient from './HttpClient';
 import * as QE from './QueryExpression';
 import { QueryExpression } from './QueryExpression';
 import mocked = jest.mocked;
+import { HttpHandler } from './HttpHanlder';
+import { AppSheetApiClientCore, Properties, RequestBody } from './AppSheetApiClientCore';
 
-describe('AppSheetApiClient', () => {
+describe('AppSheetApiClientCore', () => {
   const appId = 'app-id';
   const key = 'app-access-key';
   const properties: Properties = {
@@ -18,12 +18,12 @@ describe('AppSheetApiClient', () => {
   }/Action`;
   const rows = 'rows' as unknown as Array<Record<string, unknown>>;
   const response = 'response';
-  let client: AppSheetApiClient;
+  let httpHandler: jest.SpyInstance<HttpHandler>;
+  let client: AppSheetApiClientCore;
 
   beforeEach(() => {
-    process.env.DEBUG = 'appsheet-api-client';
-    client = new AppSheetApiClient(appId, key, properties);
-    jest.spyOn(httpClient, 'request').mockResolvedValue(response);
+    httpHandler = jest.fn().mockResolvedValue(response);
+    client = new AppSheetApiClientCore(httpHandler as unknown as HttpHandler, appId, key, properties);
     jest.spyOn(console, 'log').mockImplementation();
   });
 
@@ -31,11 +31,25 @@ describe('AppSheetApiClient', () => {
     jest.resetAllMocks();
   });
 
+  it('should print out debug info when enable debug log', async () => {
+    client = new AppSheetApiClientCore(
+      httpHandler as unknown as HttpHandler,
+      appId,
+      key,
+      properties,
+      true,
+    );
+
+    await client.add(tableName, rows);
+
+    expect(console.log).toHaveBeenCalled();
+  });
+
   describe('add()', () => {
     it('should call request with Add action', async () => {
       const actual = await client.add(tableName, rows);
 
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -54,7 +68,7 @@ describe('AppSheetApiClient', () => {
     it('should call request with Delete action', async () => {
       const actual = await client.delete(tableName, rows);
 
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -73,7 +87,7 @@ describe('AppSheetApiClient', () => {
     it('should call request with Find action', async () => {
       const actual = await client.readAllRows(tableName);
 
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -93,7 +107,7 @@ describe('AppSheetApiClient', () => {
       const keys = [{ ID: '1' }, { ID: '2' }];
       const actual = await client.readByKeys(tableName, keys);
 
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -124,7 +138,7 @@ describe('AppSheetApiClient', () => {
       expect(QE.isQueryExpression).toHaveBeenCalledWith(selector);
       expect(QE.serializeQueryExpression).not.toHaveBeenCalled();
       expect(QE.isQueryStringValid).toHaveBeenCalledWith(selector);
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -151,7 +165,7 @@ describe('AppSheetApiClient', () => {
       expect(QE.isQueryExpression).toHaveBeenCalledWith(queryExpression);
       expect(QE.serializeQueryExpression).toHaveBeenCalledWith(queryExpression);
       expect(QE.isQueryStringValid).toHaveBeenCalledWith(selector);
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {
@@ -174,7 +188,7 @@ describe('AppSheetApiClient', () => {
       const executor = client.readSelectedRows(tableName, selector);
 
       await expect(executor).rejects.toThrow(Error);
-      expect(httpClient.request).not.toHaveBeenCalled();
+      expect(httpHandler).not.toHaveBeenCalled();
     });
   });
 
@@ -182,7 +196,7 @@ describe('AppSheetApiClient', () => {
     it('should call request with Update action', async () => {
       const actual = await client.update(tableName, rows);
 
-      expect(httpClient.request).toHaveBeenCalledWith(
+      expect(httpHandler).toHaveBeenCalledWith(
         expectedUrl,
         key,
         {

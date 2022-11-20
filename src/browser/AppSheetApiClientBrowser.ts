@@ -1,5 +1,5 @@
-import { AppSheetApiClientCore, Properties } from './AppSheetApiClientCore';
-import { httpPost } from './NodeHttpClient';
+import { AppSheetApiClientCore, Properties } from '../AppSheetApiClientCore';
+import { fetchPost } from '../BrowserHttpClient';
 
 export class AppSheetApiClient extends AppSheetApiClientCore {
   constructor(
@@ -8,6 +8,6 @@ export class AppSheetApiClient extends AppSheetApiClientCore {
     properties: Omit<Properties, 'Selector'>,
     enableDebugMode?: boolean,
   ) {
-    super(httpPost, appSheetAppId, appSheetKey, properties, enableDebugMode);
+    super(fetchPost, appSheetAppId, appSheetKey, properties, enableDebugMode);
   }
 }

@@ -8,6 +8,9 @@ module.exports = {
   ],
   coveragePathIgnorePatterns: [
     'src/index.ts',
+    'src/browser/index.ts',
+    'src/browser/AppSheetApiClientBrowser.ts',
+    'src/AppSheetApiClient.ts',
   ],
   coverageThreshold: {
     global: {

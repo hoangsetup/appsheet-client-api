@@ -1,7 +1,7 @@
 export async function fetchPost<T>(
   url: string,
   applicationAccessKey: string,
-  data?: Record<string, unknown>,
+  data?: unknown,
 ): Promise<T> {
   const response = await fetch(
     url,
