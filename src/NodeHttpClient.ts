@@ -1,7 +1,7 @@
 import { RequestOptions } from 'https';
 import * as https from 'https';
 
-export function httpPost<T>(url: string, applicationAccessKey: string, data?: Record<string, unknown>): Promise<T> {
+export function httpPost<T>(url: string, applicationAccessKey: string, data?: unknown): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const options: RequestOptions = {
       method: 'POST',
@@ -20,7 +20,7 @@ export function httpPost<T>(url: string, applicationAccessKey: string, data?: Re
       incomingMessage.on('end', () => {
         const data = JSON.parse(Buffer.concat(chunks).toString());
         if (incomingMessage.statusCode === 200) {
-          resolve(data);
+          resolve(data.Rows ?? data);
         } else {
           reject(new Error(`${data.Message}. HttpStatus: 400`));
         }

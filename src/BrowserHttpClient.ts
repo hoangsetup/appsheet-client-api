@@ -18,7 +18,7 @@ export async function fetchPost<T>(
   const json = await response.json();
 
   if (response.status === 200) {
-    return json;
+    return json.Rows ?? json;
   }
 
   throw new Error(`${json.Message}. HttpStatus: ${response.status}`)
