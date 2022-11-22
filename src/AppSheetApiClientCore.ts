@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   isQueryExpression,
   isQueryStringValid,
@@ -7,7 +8,6 @@ import {
 import { HttpHandler } from './HttpHanlder';
 
 type Action = 'Add' | 'Find' | 'Edit' | 'Delete';
-type DataType = Record<string, unknown>;
 
 export type Properties = {
   Locale?: string;
@@ -17,7 +17,7 @@ export type Properties = {
   UserSettings?: Record<string, string>;
 }
 
-export type RequestBody<T extends DataType = DataType> = {
+export type RequestBody<T = any> = {
   Action: Action;
   Properties?: Properties;
   Rows: T[];
@@ -40,35 +40,35 @@ export class AppSheetApiClientCore {
     };
   }
 
-  add<T extends DataType = DataType>(tableName: string, rows: T[]): Promise<T[]> {
+  add<T = any>(tableName: string, rows: Array<Partial<T>>): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Add',
       Rows: rows,
     });
   }
 
-  delete<T extends DataType = DataType>(tableName: string, rows: Array<Partial<T>>): Promise<T[]> {
+  delete<T = any>(tableName: string, rows: T[]): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Delete',
       Rows: rows,
     });
   }
 
-  readAllRows<T extends DataType = DataType>(tableName: string): Promise<T[]> {
+  readAllRows<T = any>(tableName: string): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Find',
       Rows: [],
     });
   }
 
-  readByKeys<T extends DataType = DataType>(tableName: string, keys: T[]): Promise<T[]> {
+  readByKeys<T = any>(tableName: string, keys: T[]): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Find',
       Rows: keys,
     });
   }
 
-  async readSelectedRows<T extends DataType = DataType>(
+  async readSelectedRows<T = any>(
     tableName: string,
     selector: string | QueryExpression,
   ): Promise<T[]> {
@@ -93,7 +93,7 @@ export class AppSheetApiClientCore {
     });
   }
 
-  update<T extends DataType = DataType>(tableName: string, rows: T[]): Promise<T[]> {
+  update<T = any>(tableName: string, rows: T[]): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Edit',
       Rows: rows,
