@@ -16,6 +16,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   ignorePatterns: [
+    "jest.config.js",
     "build",
     "coverage",
     "node_modules"
