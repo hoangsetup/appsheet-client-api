@@ -9,7 +9,7 @@
         "default": "./build/index.d.ts"
       },
       "browser": {
-        "default": "./build/browser/index.js"
+        "default": "./build/platforms/browser/index.js"
       },
       "default": {
         "default": "./build/index.js"

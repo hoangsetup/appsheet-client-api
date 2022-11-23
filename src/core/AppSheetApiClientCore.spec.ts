@@ -1,7 +1,7 @@
-import * as QE from './QueryExpression';
-import { QueryExpression } from './QueryExpression';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as QE from '../expressions/QueryExpression';
+import { QueryExpression } from '../expressions/QueryExpression';
 import mocked = jest.mocked;
-import { HttpHandler } from './HttpHanlder';
 import { AppSheetApiClientCore, Properties, RequestBody } from './AppSheetApiClientCore';
 
 describe('AppSheetApiClientCore', () => {
@@ -18,12 +18,12 @@ describe('AppSheetApiClientCore', () => {
   }/Action`;
   const rows = 'rows' as unknown as Array<Record<string, unknown>>;
   const response = 'response';
-  let httpHandler: jest.SpyInstance<HttpHandler>;
+  let httpHandler: jest.SpyInstance;
   let client: AppSheetApiClientCore;
 
   beforeEach(() => {
     httpHandler = jest.fn().mockResolvedValue(response);
-    client = new AppSheetApiClientCore(httpHandler as unknown as HttpHandler, appId, key, properties);
+    client = new AppSheetApiClientCore(httpHandler as any, appId, key, properties);
     jest.spyOn(console, 'log').mockImplementation();
   });
 
@@ -33,7 +33,7 @@ describe('AppSheetApiClientCore', () => {
 
   it('should print out debug info when enable debug log', async () => {
     client = new AppSheetApiClientCore(
-      httpHandler as unknown as HttpHandler,
+      httpHandler as any,
       appId,
       key,
       properties,

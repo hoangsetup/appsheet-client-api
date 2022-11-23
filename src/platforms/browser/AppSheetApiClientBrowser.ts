@@ -1,5 +1,5 @@
-import { AppSheetApiClientCore, Properties } from '../AppSheetApiClientCore';
-import { fetchPost } from '../BrowserHttpClient';
+import { AppSheetApiClientCore, Properties } from '../../core/AppSheetApiClientCore';
+import { fetchPost } from './BrowserHttpClient';
 
 export class AppSheetApiClient extends AppSheetApiClientCore {
   constructor(

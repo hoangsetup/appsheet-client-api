@@ -1,4 +1,4 @@
-import { AppSheetApiClientCore, Properties } from './AppSheetApiClientCore';
+import { AppSheetApiClientCore, Properties } from '../../core/AppSheetApiClientCore';
 import { httpPost } from './NodeHttpClient';
 
 export class AppSheetApiClient extends AppSheetApiClientCore {

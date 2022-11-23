@@ -4,8 +4,7 @@ import {
   isQueryStringValid,
   QueryExpression,
   serializeQueryExpression,
-} from './QueryExpression';
-import { HttpHandler } from './HttpHanlder';
+} from '../expressions/QueryExpression';
 
 type Action = 'Add' | 'Find' | 'Edit' | 'Delete';
 
@@ -27,7 +26,7 @@ export class AppSheetApiClientCore {
   private readonly log: (...args: string[]) => void;
 
   constructor(
-    private request: HttpHandler,
+    private request: <T>(url: string, applicationAccessKey: string, data?: unknown) => Promise<T>,
     private appSheetAppId: string,
     private appSheetKey: string,
     private properties: Omit<Properties, 'Selector'>,

@@ -1,3 +1,3 @@
-export * from './ConditionExpression';
-export * from './QueryExpression';
-export * from './AppSheetApiClient';
+export * from './expressions/ConditionExpression';
+export * from './expressions/QueryExpression';
+export * from './platforms/node/AppSheetApiClient';

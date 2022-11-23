@@ -171,8 +171,6 @@ const result = await client.readSelectedRows<IPeople>(
 );
 ```
 
-Supported operations
-
 ## Supported expression
 
 ### Condition expressions
