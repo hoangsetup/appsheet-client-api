@@ -16,10 +16,12 @@ export type Properties = {
   UserSettings?: Record<string, string>;
 }
 
+type Rows<T> = Array<Partial<T>>;
+
 export type RequestBody<T = any> = {
   Action: Action;
   Properties?: Properties;
-  Rows: T[];
+  Rows: Rows<T>;
 }
 
 export class AppSheetApiClientCore {
@@ -39,14 +41,14 @@ export class AppSheetApiClientCore {
     };
   }
 
-  add<T = any>(tableName: string, rows: Array<Partial<T>>): Promise<T[]> {
+  add<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Add',
       Rows: rows,
     });
   }
 
-  delete<T = any>(tableName: string, rows: T[]): Promise<T[]> {
+  delete<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Delete',
       Rows: rows,
@@ -60,7 +62,7 @@ export class AppSheetApiClientCore {
     });
   }
 
-  readByKeys<T = any>(tableName: string, keys: T[]): Promise<T[]> {
+  readByKeys<T = any>(tableName: string, keys: Rows<T>): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Find',
       Rows: keys,
@@ -92,7 +94,7 @@ export class AppSheetApiClientCore {
     });
   }
 
-  update<T = any>(tableName: string, rows: T[]): Promise<T[]> {
+  update<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
     return this.makeRequest<T>(tableName, {
       Action: 'Edit',
       Rows: rows,
