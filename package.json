@@ -1,6 +1,6 @@
 {
   "name": "appsheet-client-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AppSheet api integration library for Node.js",
   "main": "./build/index.js",
   "exports": {
