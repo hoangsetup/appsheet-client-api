@@ -47,8 +47,8 @@ describe('BrowserHttpClient', () => {
     });
 
     it('should throw error when response status is not 200', async () => {
-      const message = 'Error message';
-      const errorResponse = { Message: message };
+      const detail = 'Error detail';
+      const errorResponse = { detail };
       fetchSpy.mockResolvedValue({
         status: 400,
         json: jest.fn().mockResolvedValue(errorResponse),
@@ -56,7 +56,7 @@ describe('BrowserHttpClient', () => {
 
       const promise = fetchPost(url, applicationAccessKey);
 
-      await expect(promise).rejects.toThrow(`${message}. HttpStatus: 400`);
+      await expect(promise).rejects.toThrow(`(400) ${detail}`);
     });
   });
 });

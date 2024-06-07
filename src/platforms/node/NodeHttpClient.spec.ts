@@ -57,14 +57,14 @@ describe('NodeHttpClient', () => {
     });
 
     it('should reject with error when status code is not 200', async () => {
-      const response = { Message: 'error message '};
+      const response = { detail: 'error message '};
       incomingMessage.statusCode = 400;
 
       const promise = httpPost(url, applicationAccessKey, payload);
       incomingMessage.emit('data', Buffer.from(JSON.stringify(response)));
       incomingMessage.emit('end');
 
-      await expect(promise).rejects.toThrow(`${response.Message}. HttpStatus: 400`);
+      await expect(promise).rejects.toThrow(`(400) ${response.detail}`);
     });
 
     it('should handle response error event', async () => {

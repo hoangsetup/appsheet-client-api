@@ -22,7 +22,7 @@ export function httpPost<T>(url: string, applicationAccessKey: string, data?: un
         if (incomingMessage.statusCode === 200) {
           resolve(data.Rows ?? data);
         } else {
-          reject(new Error(`${data.Message}. HttpStatus: 400`));
+          reject(new Error(`(${incomingMessage.statusCode}) ${data.detail}`));
         }
       });
 

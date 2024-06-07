@@ -21,6 +21,6 @@ export async function fetchPost<T>(
     return json.Rows ?? json;
   }
 
-  throw new Error(`${json.Message}. HttpStatus: ${response.status}`)
+  throw new Error(`(${response.status}) ${json.detail}`)
 }
 
