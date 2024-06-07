@@ -41,29 +41,29 @@ export class AppSheetApiClientCore {
     };
   }
 
-  add<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
-    return this.makeRequest<T>(tableName, {
+  async add<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Add',
       Rows: rows,
     });
   }
 
-  delete<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
-    return this.makeRequest<T>(tableName, {
+  async delete<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Delete',
       Rows: rows,
     });
   }
 
-  readAllRows<T = any>(tableName: string): Promise<T[]> {
-    return this.makeRequest<T>(tableName, {
+  async readAllRows<T = any>(tableName: string): Promise<T[]> {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Find',
       Rows: [],
     });
   }
 
-  readByKeys<T = any>(tableName: string, keys: Rows<T>): Promise<T[]> {
-    return this.makeRequest<T>(tableName, {
+  async readByKeys<T = any>(tableName: string, keys: Rows<T>): Promise<T[]> {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Find',
       Rows: keys,
     });
@@ -85,7 +85,7 @@ export class AppSheetApiClientCore {
       throw new Error('Number of opened and closed parentheses does not match.');
     }
 
-    return this.makeRequest<T>(tableName, {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Find',
       Properties: {
         Selector: selectorString,
@@ -94,14 +94,14 @@ export class AppSheetApiClientCore {
     });
   }
 
-  update<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
-    return this.makeRequest<T>(tableName, {
+  async update<T = any>(tableName: string, rows: Rows<T>): Promise<T[]> {
+    return await this.makeRequest<T>(tableName, {
       Action: 'Edit',
       Rows: rows,
     });
   }
 
-  private makeRequest<T>(
+  private async makeRequest<T>(
     tableName: string,
     data: RequestBody,
   ): Promise<T[]> {
@@ -121,6 +121,10 @@ export class AppSheetApiClientCore {
     this.log(`POST ${apiEndpoint}`);
     this.log(`BODY: ${JSON.stringify(payload)}`);
 
-    return this.request<T[]>(apiEndpoint, this.appSheetKey, payload);
+    try {
+      return await this.request<T[]>(apiEndpoint, this.appSheetKey, payload);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
   }
 }
